@@ -39,8 +39,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: ikcap/demo-cd:latest
 
-    outputs:
-      slug: ${{ steps.build.outputs.slug }}
 
   update:
     needs: [build]
@@ -48,7 +46,7 @@ jobs:
     steps:
 
       - name: run
-        run: echo ${{ needs.build.outputs.slug }}
+        run: echo ${{ needs.build.outputs.sha8 }}
 
       - name: Check out k8s manifests
         uses: actions/checkout@v3
