@@ -55,7 +55,7 @@ jobs:
 
       - name: Use value
         run: |
-          echo "${{ needs.produce.outputs.docker_tag }}"
+          echo "${{ needs.build.outputs.docker_tag }}"
   
       - name: Check out k8s manifests
         uses: actions/checkout@v3
