@@ -27,10 +27,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-        
-      - name: Echo sha
-        id: sha
-        run: echo ${ env.SHA8 }
+      - name: Get short SHA
+        id: slug
+        run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3.0.0
@@ -41,7 +40,7 @@ jobs:
           tags: ikcap/demo-cd:latest
 
     outputs:
-      sha: ${{ steps.build.outputs.sha }}
+      slug: ${{ steps.build.outputs.slug }}
 
   update:
     needs: [build]
@@ -66,7 +65,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           cd disk-server/demo-cd
-          kustomize edit set image demo-cd=ikcap/demo-cd:${{ needs.build.outputs.sha }}
+          kustomize edit set image demo-cd=ikcap/demo-cd:${{ needs.build.outputs.slug }}
           cat kustomization.yaml
 
       - name: Commit files
