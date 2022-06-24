@@ -53,10 +53,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Use value
-        run: |
-          echo "${{ needs.build.outputs.docker_tag }}"
-  
       - name: Check out k8s manifests
         uses: actions/checkout@v3
         if: github.event_name != 'pull_request'
@@ -76,7 +72,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           cd disk-server/demo-cd
-          kustomize edit set image demo-cd=ikcap/demo-cd:${{ needs.produce.outputs.docker_tag }}
+          kustomize edit set image demo-cd=ikcap/demo-cd:${{ needs.build.outputs.docker_tag }}
   
           cat kustomization.yaml
 
