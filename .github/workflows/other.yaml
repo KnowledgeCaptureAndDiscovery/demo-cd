@@ -16,7 +16,7 @@ jobs:
       - name: Expose value 
         id: exposeValue
         run: |
-          echo "::set-output name=docker_tag::${{GITHUB_SHA}}"
+          echo "::set-output name=docker_tag::${{ env.GITHUB_SHA}}"
             
   consume:
 
