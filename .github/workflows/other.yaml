@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      docker_tag: ${{ steps.exposeValue.outputs.myvalue }}
+      docker_tag: ${{ steps.exposeValue.outputs.docker_tag }}
 
     steps:
       - uses: actions/checkout@v1
