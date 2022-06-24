@@ -46,14 +46,13 @@ jobs:
         with:
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
           repository: KnowledgeCaptureAndDiscovery/k8s
-          path: 'k8s'
           ref: master
           token: ${{ secrets.GITHUB_TOKEN }} # `GH_PAT` is a secret that contains your PAT
 
       - name: test
         run: ls
 
-        
+
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
         if: github.event_name != 'pull_request'
@@ -63,7 +62,7 @@ jobs:
       - name: Update Kubernetes resources
         if: github.event_name != 'pull_request'
         run: |
-          cd k8s/disk-server/demo-cd
+          cd disk-server/demo-cd
           kustomize edit set image demo-cd=ikcap/demo-cd:${{ needs.build.outputs.sha }}
           cat kustomization.yaml
 
@@ -81,4 +80,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: "master"
-          directory: k8s
