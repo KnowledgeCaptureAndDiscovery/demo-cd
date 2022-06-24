@@ -1,7 +1,7 @@
 name: Example - Share output between jobs
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   produce:
@@ -16,7 +16,8 @@ jobs:
       - name: Expose value 
         id: exposeValue
         run: |
-          echo "::set-output name=myvalue::${{ env.GITHUB_SHA }}"
+          echo "DOCKER_IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+          echo "::set-output name=myvalue::${{ env.DOCKER_IMAGE_TAG }}"
             
   consume:
 
@@ -28,6 +29,6 @@ jobs:
       - uses: actions/checkout@v1
       - name: Use value
         run: |
-          echo "${{ needs.produce.outputs.myvalue }}"
+          echo "${{ needs.produce.outputs.DOCKER_IMAGE_TAG }}"
  
   
