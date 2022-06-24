@@ -27,7 +27,7 @@ jobs:
 
       - name: Echo sha
         id: sha
-        run: echo "${{ env.GITHUB_SHA }}"
+        run: echo "${{ GITHUB_SHA }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3.0.0
