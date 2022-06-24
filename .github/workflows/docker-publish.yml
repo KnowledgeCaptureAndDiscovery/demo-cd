@@ -47,7 +47,7 @@ jobs:
       - name: Update Kubernetes resources
         if: github.event_name != 'pull_request'
         run: |
-          cd k8s/disk_server/demo-cd
+          cd k8s/disk-server/demo-cd
           kustomize edit set image demo-cd=ikcap/demo-cd:$GITHUB_SHA
           cat kustomization.yaml
 
