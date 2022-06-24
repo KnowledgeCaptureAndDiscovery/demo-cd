@@ -69,7 +69,6 @@ jobs:
       - name: Commit files
         if: github.event_name != 'pull_request'
         run: |
-          cd k8s
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -am "Update demo"
