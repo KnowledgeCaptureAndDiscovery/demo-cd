@@ -36,7 +36,8 @@ jobs:
           repository: KnowledgeCaptureAndDiscovery/k8s
           path: './k8s'
           ref: master
-
+          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+          
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
         if: github.event_name != 'pull_request'
