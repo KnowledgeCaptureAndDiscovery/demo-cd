@@ -46,6 +46,8 @@ jobs:
 
   update:
     needs: [build]
+    if: github.event_name != 'pull_request' || github.base_ref == 'master'
+
     runs-on: ubuntu-latest
     steps:
       - name: Check out k8s manifests
