@@ -46,7 +46,7 @@ jobs:
     steps:
 
       - name: run
-        run: echo ${{ needs.build.outputs.sha8 }}
+        run: echo "${{ needs.build.outputs.sha8 }}"
 
       - name: Check out k8s manifests
         uses: actions/checkout@v3
