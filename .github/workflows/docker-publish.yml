@@ -46,10 +46,14 @@ jobs:
         with:
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
           repository: KnowledgeCaptureAndDiscovery/k8s
-          path: './k8s'
+          path: 'k8s'
           ref: master
           token: ${{ secrets.GITHUB_TOKEN }} # `GH_PAT` is a secret that contains your PAT
 
+      - name: test
+        run: ls
+
+        
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
         if: github.event_name != 'pull_request'
