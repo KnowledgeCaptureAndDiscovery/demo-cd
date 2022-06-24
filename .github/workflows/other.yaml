@@ -16,7 +16,7 @@ jobs:
       - name: Expose value 
         id: exposeValue
         run: |
-          echo "::set-output name=myvalue::${{ GITHUB_SHA }}"
+          echo "::set-output name=myvalue::${{ env.GITHUB_SHA }}"
             
   consume:
 
