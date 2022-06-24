@@ -12,11 +12,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - name: Create value as an environment variable
+        run: |
+          echo "DOCKER_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
 
       - name: Expose value 
         id: exposeValue
         run: |
-          echo "::set-output name=docker_tag::${{ env.GITHUB_SHA}}"
+          echo "::set-output name=docker_tag::${{ env.DOCKER_TAG }}"
             
   consume:
 
