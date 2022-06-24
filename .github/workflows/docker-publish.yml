@@ -48,7 +48,7 @@ jobs:
     steps:
 
       - name: run
-        run: echo ${{ steps.build.outputs.slug }}
+        run: echo ${{ needs.build.outputs.slug }}
 
       - name: Check out k8s manifests
         uses: actions/checkout@v3
