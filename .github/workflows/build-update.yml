@@ -4,15 +4,27 @@ permissions:
   contents: write
   pull-requests: write
 
+env:
+  #variables related with the repository
+  REPOSITORY_MAIN_BRANCH: "master"
+  #variables related with the docker imager registry
+  DOCKER_IMAGE_REPOSITORY: ikcap
+  DOCKER_IMAGE_NAME: demo-cd
+  #variables related with the continuous delivery
+  MANIFEST_REPOSITORY: KnowledgeCaptureAndDiscovery/k8s
+  MANIFEST_REPOSITORY_BRANCH: master
+  MANIFEST_REPOSITORY_PATH: disk-server/demo-cd
+
 on:
   push:
     branches:
-      - '*'
+      - "*"
     tags:
       - v*
   pull_request:
 
 jobs:
+  # This job build the app and the image. Then, push it
   build:
     runs-on: ubuntu-latest
     steps:
@@ -22,7 +34,7 @@ jobs:
         run: |
           echo "DOCKER_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
 
-      - name: Expose value 
+      - name: Expose value
         id: exposeValue
         run: |
           echo "::set-output name=docker_tag::${{ env.DOCKER_TAG }}"
@@ -38,13 +50,13 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           push: true
-          tags: ikcap/demo-cd:${{ env.DOCKER_TAG }}
-
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ DOCKER_IMAGE_NAME }}:${{ env.DOCKER_TAG }}
 
     outputs:
       docker_tag: ${{ steps.exposeValue.outputs.docker_tag }}
 
   update:
+    # This job the container running on k8s cluster
     needs: [build]
     if: github.event_name != 'pull_request' && github.base_ref == 'master'
 
@@ -54,8 +66,8 @@ jobs:
         uses: actions/checkout@v3
         if: github.event_name != 'pull_request'
         with:
-          repository: KnowledgeCaptureAndDiscovery/k8s
-          ref: master
+          repository: ${{ MANIFEST_REPOSITORY }}
+          ref: ${{ MANIFEST_REPOSITORY_BRANCH }}
           ssh-key: ${{ secrets.BOT_SSH }}
           persist-credentials: true
 
@@ -68,9 +80,8 @@ jobs:
       - name: Update Kubernetes resources
         if: github.event_name != 'pull_request'
         run: |
-          cd disk-server/demo-cd
-          kustomize edit set image demo-cd=ikcap/demo-cd:${{ needs.build.outputs.docker_tag }}
-  
+          cd ${{ MANIFEST_REPOSITORY_PATH }}
+          kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/${{ DOCKER_IMAGE_NAME }}:${{ needs.build.outputs.docker_tag }}
           cat kustomization.yaml
 
       - name: Commit files
@@ -85,5 +96,5 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           ssh: true
-          branch: "master"
-          repository: KnowledgeCaptureAndDiscovery/k8s
+          branch: ${{ MANIFEST_REPOSITORY_BRANCH }}
+          repository: ${{ MANIFEST_REPOSITORY }}}}
