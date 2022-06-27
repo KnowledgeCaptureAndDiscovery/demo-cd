@@ -1,4 +1,4 @@
-name: Docker
+name: Build and update app
 
 permissions:
   contents: write
@@ -58,7 +58,7 @@ jobs:
   update:
     # This job the container running on k8s cluster
     needs: [build]
-    if: github.event_name != 'pull_request' && github.base_ref == 'master'
+    if: github.event_name != 'pull_request' && github.event.push.ref == format('refs/heads/{}', github.event.repository.default_branch)
 
     runs-on: ubuntu-latest
     steps:
