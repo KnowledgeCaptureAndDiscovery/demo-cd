@@ -80,7 +80,7 @@ jobs:
       - name: Update Kubernetes resources
         if: github.event_name != 'pull_request'
         run: |
-          cd ${{ MANIFEST_REPOSITORY_PATH }}
+          cd ${{ env.MANIFEST_REPOSITORY_PATH }}
           kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/${{ DOCKER_IMAGE_NAME }}:${{ needs.build.outputs.docker_tag }}
           cat kustomization.yaml
 
